@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -25,10 +26,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: 'Facebook', icon: '📘', url: '#' },
-    { name: 'Twitter', icon: '🐦', url: '#' },
-    { name: 'LinkedIn', icon: '💼', url: '#' },
-    { name: 'Instagram', icon: '📷', url: '#' }
+    { name: 'Facebook', Icon: FaFacebook, url: '#' },
+    { name: 'Twitter', Icon: FaTwitter, url: '#' },
+    { name: 'LinkedIn', Icon: FaLinkedin, url: '#' },
+    { name: 'Instagram', Icon: FaInstagram, url: '#' }
   ];
 
   return (
@@ -68,8 +69,9 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-2xl hover:scale-110 transition-transform duration-300 hover:text-green-400"
                   title={social.name}
+                  aria-label={social.name}
                 >
-                  {social.icon}
+                  <social.Icon />
                 </a>
               ))}
             </div>
