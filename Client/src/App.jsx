@@ -1,23 +1,23 @@
-import React from 'react';
+import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from "./Pages/Home";
-import AdminDashboard from "./Pages/dashboard";
-import Products from "./Pages/Products";
-import EnergyManagement from "./Pages/EnergyManagement";
-import Resources from "./Pages/Resources";
-import About from "./Pages/About";
-import Contact from "./Pages/Contact";
+
+import Home from "./Pages/Home"
+import AdminDashboard from "./Pages/dashboard"
+import Products from "./Pages/Products"
+import EnergyManagement from "./Pages/EnergyManagement"
+import Resources from "./Pages/Resources"
+import About from "./Pages/About"
+import Contact from "./Pages/Contact"
+import Layout from './Components/Layout';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
-import LoadingSpinner from './Components/LoadingSpinner';
-import AdminSignIn from './Pages/Adminsignin.jsx';
+import LoadingSpinner from './Components/LoadingSpinner'
+import AdminSignIn  from './Pages/AdminSignIn';
 import AdminSignUp from './Pages/AdminSignUp';
 import Dashboard from './Pages/dashboard';
-import MainFormWrapper from './Components/UserDetailForm/MainFormWrapper.jsx';
-import { AuthProvider } from "./Context/AuthContext.jsx"; // ✅ Context imported here
+import ChatWidget from './Components/ChatWidget';
 
-
-// ✅ Error Boundary Component
+// Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -58,28 +58,26 @@ class ErrorBoundary extends React.Component {
 export default function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider> {/* ✅ Global AuthProvider added here */}
-        <BrowserRouter>
-          <Navbar />
-          <LoadingSpinner />
+      <BrowserRouter>
+        <Navbar/>
+        <LoadingSpinner/>
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signin" element={<AdminSignIn />} />
-            <Route path="/signup" element={<AdminSignUp />} />
-            <Route path="/dashboard" element={<AdminDashboard />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/energy-dashboard" element={<Dashboard />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/UserDetail-form" element={<MainFormWrapper />} />
-           
-          </Routes>
-
-          <Footer />
-        </BrowserRouter>
-      </AuthProvider>
+        <Routes>      
+          <Route path="/" element={<Home />} />        
+          <Route path="/signin" element={<AdminSignIn />} />
+          <Route path="/signup" element={<AdminSignUp />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/energy-management" element={<Dashboard />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+        <Footer/>
+        <ChatWidget />
+      </BrowserRouter>
     </ErrorBoundary>
-  );
+  )
 }
+
+

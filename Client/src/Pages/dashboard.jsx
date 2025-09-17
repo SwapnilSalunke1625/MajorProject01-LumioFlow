@@ -1,6 +1,255 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Zap, TrendingUp, AlertTriangle, Lightbulb, Leaf, DollarSign, Power, Activity, Eye, EyeOff } from 'lucide-react';
+import { Zap, TrendingUp, AlertTriangle, Lightbulb, Leaf, DollarSign, Power, Activity, Eye, EyeOff, BarChart2, PieChart as PieChartIcon, Plus, Trash2, Edit2, Home, Settings, Menu, X } from 'lucide-react';
+
+const DEFAULT_ROOMS = [
+  'Living Room',
+  'Bedroom',
+  'Kitchen',
+  'Bathroom',
+  'Dining Room',
+  'Study Room',
+];
+
+// Device Form Component
+const DeviceRoomEnergyForm = ({ rooms, setRooms, selectedRoomIdx, setSelectedRoomIdx }) => {
+  const [deviceName, setDeviceName] = useState('');
+  const [devicePower, setDevicePower] = useState('');
+  const [deviceQuantity, setDeviceQuantity] = useState('1');
+  const [deviceHours, setDeviceHours] = useState('8');
+  const [newRoomName, setNewRoomName] = useState('');
+
+  const addDevice = () => {
+    if (!deviceName || !devicePower) return;
+    
+    const updatedRooms = [...rooms];
+    updatedRooms[selectedRoomIdx].devices.push({
+      name: deviceName,
+      power: devicePower,
+      quantity: deviceQuantity,
+      hours: deviceHours
+    });
+    setRooms(updatedRooms);
+    
+    // Reset form
+    setDeviceName('');
+    setDevicePower('');
+    setDeviceQuantity('1');
+    setDeviceHours('8');
+  };
+
+  const removeDevice = (deviceIdx) => {
+    const updatedRooms = [...rooms];
+    updatedRooms[selectedRoomIdx].devices.splice(deviceIdx, 1);
+    setRooms(updatedRooms);
+  };
+
+  const addRoom = () => {
+    if (!newRoomName) return;
+    setRooms([...rooms, { name: newRoomName, devices: [] }]);
+    setNewRoomName('');
+  };
+
+  const removeRoom = (roomIdx) => {
+    if (rooms.length <= 1) return;
+    const updatedRooms = rooms.filter((_, idx) => idx !== roomIdx);
+    setRooms(updatedRooms);
+    if (selectedRoomIdx >= updatedRooms.length) {
+      setSelectedRoomIdx(0);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl p-6 shadow border border-slate-100">
+      <h2 className="text-2xl font-bold text-slate-800 mb-6">Device & Room Setup</h2>
+      {/* Room Management */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-slate-700 mb-3">Rooms</h3>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {rooms.map((room, idx) => (
+            <div
+              key={room.name}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer ${
+                selectedRoomIdx === idx ? 'bg-emerald-100 border-emerald-400' : 'bg-slate-100 border-slate-200'
+              }`}
+              onClick={() => setSelectedRoomIdx(idx)}
+            >
+              <span>{room.name}</span>
+              {rooms.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeRoom(idx);
+                  }}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="New room name"
+            value={newRoomName}
+            onChange={(e) => setNewRoomName(e.target.value)}
+            className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+          <button
+            onClick={addRoom}
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Add Room
+          </button>
+        </div>
+      </div>
+      {/* Device Management */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-slate-700 mb-3">
+          Add Device to {rooms[selectedRoomIdx]?.name}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Device name"
+            value={deviceName}
+            onChange={(e) => setDeviceName(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+          <input
+            type="number"
+            placeholder="Power (W)"
+            value={devicePower}
+            onChange={(e) => setDevicePower(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+          <input
+            type="number"
+            placeholder="Quantity"
+            value={deviceQuantity}
+            onChange={(e) => setDeviceQuantity(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+          <input
+            type="number"
+            placeholder="Hours/day"
+            value={deviceHours}
+            onChange={(e) => setDeviceHours(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+        </div>
+        <button
+          onClick={addDevice}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Add Device
+        </button>
+      </div>
+      {/* Current Room Devices */}
+      <div>
+        <h3 className="text-lg font-semibold text-slate-700 mb-3">
+          Devices in {rooms[selectedRoomIdx]?.name}
+        </h3>
+        {rooms[selectedRoomIdx]?.devices.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-100">
+                  <th className="py-2 px-3 text-left">Device</th>
+                  <th className="py-2 px-3 text-left">Power (W)</th>
+                  <th className="py-2 px-3 text-left">Quantity</th>
+                  <th className="py-2 px-3 text-left">Hours/day</th>
+                  <th className="py-2 px-3 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rooms[selectedRoomIdx].devices.map((device, idx) => (
+                  <tr key={idx} className="border-b border-slate-100">
+                    <td className="py-2 px-3">{device.name}</td>
+                    <td className="py-2 px-3">{device.power}</td>
+                    <td className="py-2 px-3">{device.quantity}</td>
+                    <td className="py-2 px-3">{device.hours}</td>
+                    <td className="py-2 px-3">
+                      <button
+                        onClick={() => removeDevice(idx)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-slate-500">No devices added to this room yet.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Sidebar Component
+const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className={`bg-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-16'}`}>
+      <div className="p-4">
+        <div className="flex items-center justify-between">
+          {isOpen && <h2 className="text-xl font-bold text-slate-800">Energy Monitor</h2>}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-lg hover:bg-slate-100"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+      <nav className="mt-8">
+        <div className="px-4 space-y-2">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-emerald-100 text-emerald-700">
+            <Home className="w-5 h-5" />
+            {isOpen && <span>Dashboard</span>}
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <BarChart2 className="w-5 h-5" />
+            {isOpen && <span>Analytics</span>}
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <Settings className="w-5 h-5" />
+            {isOpen && <span>Settings</span>}
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+};
+
+// Topbar Component
+const Topbar = () => {
+  return (
+    <div className="bg-white shadow-sm border-b border-slate-200 px-8 py-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-slate-800">Energy Dashboard</h1>
+          <p className="text-sm text-slate-600">Monitor your power consumption in real-time</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+            <span className="text-sm text-slate-600">Live Monitoring</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const [readings, setReadings] = useState([]);
@@ -13,6 +262,24 @@ const Dashboard = () => {
   const [showTips, setShowTips] = useState(false);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState('daily');
   const [isConnected, setIsConnected] = useState(false);
+  const [rooms, setRooms] = useState(
+    DEFAULT_ROOMS.map(room => ({ name: room, devices: [] }))
+  );
+  const [selectedRoomIdx, setSelectedRoomIdx] = useState(0);
+  const [setupComplete, setSetupComplete] = useState(false);
+
+  // Calculate stat card values
+  const totalRooms = rooms.length;
+  const totalDevices = rooms.reduce((sum, room) => sum + room.devices.length, 0);
+  const totalConsumption = rooms.reduce(
+    (sum, room) => sum + room.devices.reduce((dSum, device) => {
+      const hours = Number(device.hours) || 0;
+      const qty = Number(device.quantity) || 1;
+      const power = Number(device.power) || 0;
+      return dSum + (power * hours * qty) / 1000;
+    }, 0),
+    0
+  );
 
   // Energy saving tips
   const energyTips = [
@@ -50,54 +317,40 @@ const Dashboard = () => {
 
   const fetchReadings = async () => {
     try {
-      console.log('Attempting to fetch from:', 'http://192.168.235.50:8000/api/power');
-      const response = await fetch('http://192.168.235.50:8000/api/power');
+      // Try to fetch from API first
+      const response = await fetch('http://10.121.127.50:8000/api/power');
       
       if (!response.ok) {
-        console.error('Server response not OK:', response.status, response.statusText);
-        throw new Error(`Failed to fetch readings: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch readings: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Raw API response:', data);
       
-      // Ensure data is an array and has the required properties
       if (!Array.isArray(data)) {
-        console.error('Invalid data format received:', data);
         throw new Error('Invalid data format: Expected an array');
       }
 
-      // Validate each reading has required properties
       const validData = data.filter(reading => {
-        const isValid = reading && 
+        return reading && 
           typeof reading.voltage === 'number' && 
           typeof reading.current === 'number' && 
           typeof reading.power === 'number' &&
           reading.timestamp;
-        
-        if (!isValid) {
-          console.warn('Invalid reading found:', reading);
-        }
-        return isValid;
       });
 
       if (validData.length === 0) {
-        console.error('No valid readings found in data');
         throw new Error('No valid readings found');
       }
 
-      // Sort data by timestamp in descending order (newest first)
       const sortedData = validData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      console.log('Processed valid data:', sortedData);
       
       setReadings(sortedData);
       calculatePredictions(sortedData);
       checkPowerAlerts(sortedData);
       setIsConnected(true);
     } catch (error) {
-      console.error('Error in fetchReadings:', error);
+      console.error('API fetch failed, using mock data:', error.message);
       setIsConnected(false);
-      // Generate mock data for demo
       generateMockData();
     }
   };
@@ -105,24 +358,19 @@ const Dashboard = () => {
   const generateMockData = () => {
     const now = Date.now();
     const mockData = Array.from({ length: 24 }, (_, i) => {
-      // Create timestamp in IST
       const timestamp = new Date(now - (23 - i) * 60 * 60 * 1000);
       const hour = timestamp.getHours();
       
-      // Base values
       const baseVoltage = 220;
       const baseCurrent = 8;
       
-      // Time-based multiplier (higher during day, lower at night)
       const isDaytime = hour >= 6 && hour <= 18;
       const timeMultiplier = isDaytime ? 1.2 : 0.8;
       
-      // Generate values with realistic variations
       const voltage = baseVoltage + (Math.random() * 10 - 5);
       const current = (baseCurrent * timeMultiplier) + (Math.random() * 2 - 1);
       const power = voltage * current;
 
-      // Ensure values are within realistic ranges
       const clampedVoltage = Math.min(Math.max(voltage, 200), 250);
       const clampedCurrent = Math.min(Math.max(current, 0), 15);
       const clampedPower = clampedVoltage * clampedCurrent;
@@ -135,7 +383,6 @@ const Dashboard = () => {
       };
     });
 
-    console.log('Generated mock data:', mockData);
     setReadings(mockData);
     calculatePredictions(mockData);
     checkPowerAlerts(mockData);
@@ -143,21 +390,14 @@ const Dashboard = () => {
 
   const calculatePredictions = (data) => {
     if (!data || data.length === 0) {
-      console.log('No data available for predictions');
-      setPredictions({
-        daily: 0,
-        weekly: 0,
-        monthly: 0
-      });
+      setPredictions({ daily: 0, weekly: 0, monthly: 0 });
       return;
     }
 
     try {
-      // Get the latest reading
-      const latestReading = data[0]; // Since data is sorted newest first
+      const latestReading = data[0];
       const ratePerKWh = 5; // ₹5 per kWh
 
-      // Calculate average power over the last hour
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
       const recentReadings = data.filter(reading => new Date(reading.timestamp) >= oneHourAgo);
       
@@ -168,21 +408,10 @@ const Dashboard = () => {
         averagePower = latestReading.power;
       }
 
-      // Calculate power in kW
       const powerInKW = averagePower / 1000;
-
-      // Calculate predictions
       const dailyPrediction = powerInKW * 24 * ratePerKWh;
       const weeklyPrediction = dailyPrediction * 7;
       const monthlyPrediction = dailyPrediction * 30;
-
-      console.log('Bill Predictions:', {
-        averagePower,
-        powerInKW,
-        dailyPrediction,
-        weeklyPrediction,
-        monthlyPrediction
-      });
 
       setPredictions({
         daily: Number(dailyPrediction.toFixed(2)),
@@ -191,11 +420,7 @@ const Dashboard = () => {
       });
     } catch (error) {
       console.error('Error calculating predictions:', error);
-      setPredictions({
-        daily: 0,
-        weekly: 0,
-        monthly: 0
-      });
+      setPredictions({ daily: 0, weekly: 0, monthly: 0 });
     }
   };
 
@@ -206,10 +431,9 @@ const Dashboard = () => {
     }
 
     try {
-      const latestReading = data[0]; // Since data is sorted newest first
+      const latestReading = data[0];
       const alerts = [];
 
-      // Voltage checks
       if (latestReading.voltage < 200) {
         alerts.push({
           type: 'warning',
@@ -224,7 +448,6 @@ const Dashboard = () => {
         });
       }
 
-      // Power consumption checks
       if (latestReading.power > 2000) {
         alerts.push({
           type: 'alert',
@@ -239,7 +462,6 @@ const Dashboard = () => {
         });
       }
 
-      // Current checks
       if (latestReading.current > 10) {
         alerts.push({
           type: 'warning',
@@ -248,7 +470,6 @@ const Dashboard = () => {
         });
       }
 
-      // Check for sudden power spikes
       if (data.length >= 2) {
         const previousReading = data[1];
         const powerChange = Math.abs(latestReading.power - previousReading.power);
@@ -261,7 +482,6 @@ const Dashboard = () => {
         }
       }
 
-      console.log('Power alerts generated:', alerts);
       setPowerAlerts(alerts);
     } catch (error) {
       console.error('Error checking power alerts:', error);
@@ -270,19 +490,17 @@ const Dashboard = () => {
   };
 
   const getChartData = () => {
-    if (!isConnected || !readings || readings.length === 0) {
-      return Array(24).fill({
-        time: '00:00',
+    if (!readings || readings.length === 0) {
+      return Array(24).fill(0).map((_, i) => ({
+        time: `${String(i).padStart(2, '0')}:00`,
         power: 0,
         voltage: 0,
         current: 0
-      });
+      }));
     }
 
-    // Get the last 24 readings
     const recentReadings = readings.slice(0, 24);
     
-    // Format the data for charts with IST
     const formattedData = recentReadings.map(reading => {
       const timestamp = new Date(reading.timestamp);
       return {
@@ -299,93 +517,245 @@ const Dashboard = () => {
       };
     });
 
-    // Sort by timestamp in ascending order for proper chart display
     return formattedData.sort((a, b) => a.timestamp - b.timestamp);
   };
 
-  const getDistributionData = () => {
-    if (!isConnected || !readings || readings.length === 0) {
-      return [
-        { name: 'Base Load', value: 0, color: '#3b82f6' },
-        { name: 'Average', value: 0, color: '#10b981' },
-        { name: 'Peak', value: 0, color: '#ef4444' }
-      ];
+  const currentOutputPower = readings.length > 0 ? readings[0].power : 0;
+  const selectedRoom = rooms[selectedRoomIdx];
+  const totalRoomPower = selectedRoom.devices.reduce(
+    (sum, device) => sum + (Number(device.power) || 0) * (Number(device.quantity) || 1),
+    0
+  );
+
+  // --- Original greedy ON/OFF detection ---
+  const margin = 20;
+  let remainingPower = currentOutputPower;
+  const deviceStatus = selectedRoom.devices.map(device => {
+    const deviceTotal = (Number(device.power) || 0) * (Number(device.quantity) || 1);
+    if (Math.abs(remainingPower - deviceTotal) <= margin || (remainingPower >= deviceTotal && deviceTotal > 0)) {
+      remainingPower -= deviceTotal;
+      return true;
     }
+    return false;
+  });
 
-    const powerValues = readings.map(r => Number(r.power.toFixed(2)));
-    const average = Number((powerValues.reduce((a, b) => a + b, 0) / powerValues.length).toFixed(2));
-    const peak = Number(Math.max(...powerValues).toFixed(2));
-    const base = Number(Math.min(...powerValues).toFixed(2));
-
-    return [
-      { name: 'Base Load', value: base, color: '#3b82f6' },
-      { name: 'Average', value: average, color: '#10b981' },
-      { name: 'Peak', value: peak, color: '#ef4444' }
-    ];
-  };
-
-  const getCurrentReading = () => {
-    if (!isConnected || !readings || readings.length === 0) {
-      return { voltage: 0, current: 0, power: 0 };
-    }
-    // Always return the first reading since data is sorted by newest first
-    return readings[0];
-  };
-
-  const getCurrentPrediction = () => {
-    if (!isConnected) return 0;
-    switch (selectedTimeFrame) {
-      case 'daily': return predictions.daily;
-      case 'weekly': return predictions.weekly;
-      case 'monthly': return predictions.monthly;
-      default: return predictions.daily;
-    }
-  };
-
-  const currentReading = getCurrentReading();
-
-  // Update the recent readings table to show latest readings first with IST
-  const getRecentReadings = () => {
-    if (!readings || readings.length === 0) {
-      return [];
-    }
-    // Return the 10 most recent readings
-    return readings.slice(0, 10);
-  };
+  if (!setupComplete) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="w-full max-w-4xl">
+          <DeviceRoomEnergyForm
+            rooms={rooms}
+            setRooms={setRooms}
+            selectedRoomIdx={selectedRoomIdx}
+            setSelectedRoomIdx={setSelectedRoomIdx}
+          />
+          <div className="flex justify-end mt-6">
+            <button
+              className="bg-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition"
+              onClick={() => setSetupComplete(true)}
+            >
+              Continue to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-200 text-slate-800">
-      <br /><br />
-      <div className="relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-emerald-200 to-blue-200 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="relative z-10 p-8">
-          <div className="max-w-7xl mx-auto space-y-8">
-            {/* Header */}
-            <div className="text-center space-y-4">
-              <div className="flex items-center justify-center space-x-4">
-                <div className="p-3 rounded-full bg-gradient-to-r from-emerald-300 to-blue-300">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h1 className="text-5xl font-bold bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 bg-clip-text text-transparent">
-                  Energy Dashboard
-                </h1>
-                <br /><br />
-              </div>
-              <p className="text-xl text-slate-600">Real-time power consumption monitoring & optimization</p>
+    <div className="flex min-h-screen bg-slate-50">
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <Topbar />
+        <main className="flex-1 p-8 overflow-y-auto">
+          {/* Connection Status */}
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold text-slate-800">Energy Dashboard</h1>
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+              <span className="text-sm text-slate-600">
+                {isConnected ? 'Connected to API' : 'Using Mock Data'}
+              </span>
             </div>
+          </div>
 
-            {/* Alerts */}
-            {powerAlerts.length > 0 && (
+          {/* Current Reading Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-emerald-100 text-sm">Voltage</p>
+                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].voltage.toFixed(2) : '0.00'} V</p>
+                </div>
+                <Zap className="w-8 h-8 text-emerald-200" />
+              </div>
+            </div>
+            <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-blue-100 text-sm">Current</p>
+                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].current.toFixed(2) : '0.00'} A</p>
+                </div>
+                <Activity className="w-8 h-8 text-blue-200" />
+              </div>
+            </div>
+            <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-purple-100 text-sm">Power</p>
+                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].power.toFixed(2) : '0.00'} W</p>
+                </div>
+                <Power className="w-8 h-8 text-purple-200" />
+              </div>
+            </div>
+          </div>
+
+          {/* Rooms Overview */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4 text-slate-800">Rooms Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {rooms.map((room, idx) => (
+                <div
+                  key={room.name}
+                  className={`cursor-pointer bg-white rounded-2xl p-6 shadow border transition-all ${
+                    selectedRoomIdx === idx ? 'ring-2 ring-emerald-400 border-emerald-200' : 'border-slate-100 hover:border-slate-200'
+                  }`}
+                  onClick={() => setSelectedRoomIdx(idx)}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <Home className="w-6 h-6 text-emerald-500" />
+                    <span className="text-lg font-semibold text-slate-800">{room.name}</span>
+                  </div>
+                  <div className="space-y-1 text-sm text-slate-600">
+                    <div>Devices: {room.devices.length}</div>
+                    <div>Total Power: {room.devices.reduce((sum, d) => sum + (Number(d.power) || 0) * (Number(d.quantity) || 1), 0)} W</div>
+                    <div>Daily Energy: {room.devices.reduce((sum, d) => sum + ((Number(d.power) || 0) * (Number(d.hours) || 0) * (Number(d.quantity) || 1)) / 1000, 0).toFixed(2)} kWh</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Selected Room Details */}
+          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Power className="w-6 h-6 text-blue-500" />
+                <h2 className="text-xl font-bold text-slate-800">{selectedRoom.name} - Device Details</h2>
+              </div>
+            </div>
+            {selectedRoom.devices.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-left text-sm">
+                  <thead>
+                    <tr className="text-gray-400">
+                      <th className="py-2 px-4">Device</th>
+                      <th className="py-2 px-4">Power (W)</th>
+                      <th className="py-2 px-4">Quantity</th>
+                      <th className="py-2 px-4">Hours/Day</th>
+                      <th className="py-2 px-4">Daily (kWh)</th>
+                      <th className="py-2 px-4">Monthly (kWh)</th>
+                      <th className="py-2 px-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedRoom.devices.map((device, idx) => {
+                      const power = Number(device.power) || 0;
+                      const qty = Number(device.quantity) || 1;
+                      const hours = Number(device.hours) || 0;
+                      const daily = ((power * hours * qty) / 1000).toFixed(2);
+                      const monthly = (daily * 30).toFixed(2);
+                      return (
+                        <tr key={idx} className={deviceStatus[idx] ? 'text-green-600' : 'text-red-400'}>
+                          <td className="py-2 px-4">{device.name}</td>
+                          <td className="py-2 px-4">{power}</td>
+                          <td className="py-2 px-4">{qty}</td>
+                          <td className="py-2 px-4">{hours}</td>
+                          <td className="py-2 px-4">{daily}</td>
+                          <td className="py-2 px-4">{monthly}</td>
+                          <td className="py-2 px-4 font-bold">
+                            {deviceStatus[idx] ? (
+                              <span className="flex items-center text-green-600">
+                                <span className="w-3 h-3 rounded-full bg-green-500 mr-2"></span> ON
+                              </span>
+                            ) : (
+                              <span className="flex items-center text-red-500">
+                                <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span> OFF
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-slate-500">No devices added to this room yet.</p>
+            )}
+          </div>
+
+          {/* Overall Summary */}
+          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-slate-800">Overall Summary</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-emerald-100 rounded-xl p-4 text-emerald-800">
+                <div className="font-semibold">Total Rooms</div>
+                <div className="text-2xl font-bold">{rooms.length}</div>
+              </div>
+              <div className="bg-blue-100 rounded-xl p-4 text-blue-800">
+                <div className="font-semibold">Total Devices</div>
+                <div className="text-2xl font-bold">{totalDevices}</div>
+              </div>
+              <div className="bg-purple-100 rounded-xl p-4 text-purple-800">
+                <div className="font-semibold">Total Daily Energy</div>
+                <div className="text-2xl font-bold">{totalConsumption.toFixed(2)} kWh</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Charts & Analytics */}
+          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-slate-800">Analytics & Charts</h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={getChartData()}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="time" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="power" stroke="#10b981" name="Power (W)" />
+                  <Line type="monotone" dataKey="voltage" stroke="#3b82f6" name="Voltage (V)" />
+                  <Line type="monotone" dataKey="current" stroke="#8b5cf6" name="Current (A)" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Energy Saving Tips */}
+          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-slate-800">Energy Saving Tips</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {energyTips.map((tip, idx) => (
+                <div key={idx} className="bg-emerald-50 rounded-xl p-4 text-emerald-800">
+                  <div className="mb-2">{tip.icon}</div>
+                  <div className="font-semibold mb-1">{tip.title}</div>
+                  <div className="text-sm">{tip.description}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Alerts */}
+          {powerAlerts.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-xl font-bold mb-4 text-slate-800">Alerts</h2>
               <div className="grid gap-4">
-                {powerAlerts.map((alert, index) => (
+                {powerAlerts.map((alert, idx) => (
                   <div
-                    key={index}
-                    className={`p-4 rounded-2xl backdrop-blur-xl border transition-all duration-300 hover:scale-[1.01] ${
+                    key={idx}
+                    className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${
                       alert.type === 'warning'
                         ? 'bg-red-100 border-red-300 text-red-700'
                         : alert.type === 'alert'
@@ -400,351 +770,9 @@ const Dashboard = () => {
                   </div>
                 ))}
               </div>
-            )}
-
-            {/* Main Metrics - Smaller Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200 hover:border-emerald-300 transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <Power className="w-5 h-5 text-emerald-500" />
-                  <span className="text-xs text-slate-500">VOLTAGE</span>
-                </div>
-                <p className="text-2xl font-bold text-slate-800">{currentReading.voltage.toFixed(1)}<span className="text-sm text-slate-500 ml-1">V</span></p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200 hover:border-blue-300 transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <Activity className="w-5 h-5 text-blue-500" />
-                  <span className="text-xs text-slate-500">CURRENT</span>
-                </div>
-                <p className="text-2xl font-bold text-slate-800">{currentReading.current.toFixed(2)}<span className="text-sm text-slate-500 ml-1">A</span></p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200 hover:border-purple-300 transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <Zap className="w-5 h-5 text-purple-500" />
-                  <span className="text-xs text-slate-500">POWER</span>
-                </div>
-                <p className="text-2xl font-bold text-slate-800">{currentReading.power.toFixed(0)}<span className="text-sm text-slate-500 ml-1">W</span></p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200 hover:border-amber-300 transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <DollarSign className="w-5 h-5 text-amber-500" />
-                  <span className="text-xs text-slate-500">COST</span>
-                </div>
-                <p className="text-2xl font-bold text-slate-800">₹{getCurrentPrediction().toFixed(0)}</p>
-              </div>
             </div>
-
-            {/* Bill Prediction Card */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Bill Prediction</h3>
-                  <p className="text-slate-600">Based on current consumption patterns</p>
-                </div>
-                <div className="flex space-x-2 mt-4 md:mt-0">
-                  {['daily', 'weekly', 'monthly'].map((period) => (
-                    <button
-                      key={period}
-                      onClick={() => setSelectedTimeFrame(period)}
-                      className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                        selectedTimeFrame === period
-                          ? 'bg-gradient-to-r from-emerald-400 to-blue-400 text-white'
-                          : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
-                      }`}
-                    >
-                      {period.charAt(0).toUpperCase() + period.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="text-center">
-                <p className="text-6xl font-bold bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
-                  ₹{getCurrentPrediction().toFixed(2)}
-                </p>
-                <p className="text-xl text-slate-600 mt-2">Estimated {selectedTimeFrame} bill</p>
-              </div>
-            </div>
-
-            {/* Large Charts Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              {/* Power Consumption Chart */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-                <h3 className="text-2xl font-bold text-slate-800 mb-6">Power Consumption Timeline</h3>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={getChartData()}>
-                      <defs>
-                        <linearGradient id="powerGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
-                      <XAxis 
-                        dataKey="time" 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        interval="preserveStartEnd"
-                        minTickGap={30}
-                      />
-                      <YAxis 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        domain={[0, 'auto']}
-                        tickFormatter={(value) => `${value.toFixed(0)}W`}
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255,255,255,0.9)', 
-                          border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: '12px',
-                          color: '#1f2937'
-                        }}
-                        formatter={(value) => [`${value.toFixed(2)} W`, 'Power']}
-                        labelFormatter={(label) => `Time: ${label}`}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="power"
-                        stroke="#10b981"
-                        strokeWidth={3}
-                        fillOpacity={1}
-                        fill="url(#powerGradient)"
-                        isAnimationActive={true}
-                        dot={false}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Multi-parameter Chart */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-                <h3 className="text-2xl font-bold text-slate-800 mb-6">Real-time Parameters</h3>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={getChartData()}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
-                      <XAxis 
-                        dataKey="time" 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        interval="preserveStartEnd"
-                        minTickGap={30}
-                      />
-                      <YAxis 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        domain={[0, 'auto']}
-                        tickFormatter={(value) => `${value.toFixed(1)}`}
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255,255,255,0.9)', 
-                          border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: '12px',
-                          color: '#1f2937'
-                        }}
-                        formatter={(value, name) => {
-                          const unit = name === 'voltage' ? 'V' : name === 'current' ? 'A' : 'W';
-                          return [`${value.toFixed(2)} ${unit}`, name.charAt(0).toUpperCase() + name.slice(1)];
-                        }}
-                        labelFormatter={(label) => `Time: ${label}`}
-                      />
-                      <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="voltage" 
-                        stroke="#3b82f6" 
-                        strokeWidth={2}
-                        dot={false}
-                        name="Voltage (V)"
-                        isAnimationActive={true}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="current" 
-                        stroke="#8b5cf6" 
-                        strokeWidth={2}
-                        dot={false}
-                        name="Current (A)"
-                        isAnimationActive={true}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Distribution Chart */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-                <h3 className="text-2xl font-bold text-slate-800 mb-6">Power Distribution</h3>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={getDistributionData()}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={120}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({ name, value }) => `${name}: ${value.toFixed(0)}W`}
-                      >
-                        {getDistributionData().map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255,255,255,0.9)', 
-                          border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: '12px',
-                          color: '#1f2937'
-                        }}
-                        formatter={(value) => `${value.toFixed(2)} W`}
-                      />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Hourly Consumption Bar Chart */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-                <h3 className="text-2xl font-bold text-slate-800 mb-6">Hourly Consumption</h3>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={getChartData()}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
-                      <XAxis 
-                        dataKey="time" 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        interval="preserveStartEnd"
-                        minTickGap={30}
-                      />
-                      <YAxis 
-                        stroke="#6b7280" 
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        domain={[0, 'auto']}
-                        tickFormatter={(value) => `${value.toFixed(0)}W`}
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255,255,255,0.9)', 
-                          border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: '12px',
-                          color: '#1f2937'
-                        }}
-                        formatter={(value) => [`${value.toFixed(2)} W`, 'Power']}
-                        labelFormatter={(label) => `Time: ${label}`}
-                      />
-                      <Bar 
-                        dataKey="power" 
-                        fill="url(#barGradient)"
-                        radius={[4, 4, 0, 0]}
-                      />
-                      <defs>
-                        <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.2}/>
-                        </linearGradient>
-                      </defs>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-
-            {/* Energy Saving Tips */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
-                  Energy Saving Tips
-                </h2>
-                <button
-                  onClick={() => setShowTips(!showTips)}
-                  className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-400 text-white font-medium hover:from-emerald-500 hover:to-blue-500 transition-all duration-300"
-                >
-                  {showTips ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  <span>{showTips ? 'Hide Tips' : 'Show Tips'}</span>
-                </button>
-              </div>
-              
-              {showTips && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {energyTips.map((tip, index) => (
-                    <div
-                      key={index}
-                      className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-slate-200 hover:border-slate-300 transition-all duration-300 hover:scale-105"
-                    >
-                      <div className="mb-4">{tip.icon}</div>
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2">{tip.title}</h3>
-                      <p className="text-slate-600">{tip.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Recent Readings Table */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-200">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Recent Readings</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left py-4 px-4 text-slate-500 font-medium">Time</th>
-                      <th className="text-left py-4 px-4 text-slate-500 font-medium">Voltage (V)</th>
-                      <th className="text-left py-4 px-4 text-slate-500 font-medium">Current (A)</th>
-                      <th className="text-left py-4 px-4 text-slate-500 font-medium">Power (W)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {getRecentReadings().map((reading, index) => (
-                      <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-all duration-200">
-                        <td className="py-4 px-4 text-slate-800">
-                          {new Date(reading.timestamp).toLocaleTimeString('en-IN', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            hour12: false,
-                            timeZone: 'Asia/Kolkata'
-                          })}
-                        </td>
-                        <td className="py-4 px-4 text-emerald-600 font-medium">
-                          {reading.voltage.toFixed(2)}
-                        </td>
-                        <td className="py-4 px-4 text-blue-600 font-medium">
-                          {reading.current.toFixed(2)}
-                        </td>
-                        <td className="py-4 px-4 text-purple-600 font-medium">
-                          {reading.power.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+          )}
+        </main>
       </div>
     </div>
   );

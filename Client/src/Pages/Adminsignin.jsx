@@ -8,40 +8,28 @@ function Adminsignin() {
   const [password, setPassword] = useState(""); // controlled password input
   const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await axios.post(
-      "/api/v1/users/signin",
-      {
+    try {
+      const response = await axios.post("/api/v1/users/signin", {
         email,
         password,
-      },
-      {
-        withCredentials: true, 
-      }
-    );
+      });
 
-    // Optional: If you're using token and user from response
-    const { token, user } = response?.data?.data || {};
+      // Get token and user data from response
+      const { token, user } = response.data.data;
 
-    if (token && user) {
+      // Save token and user to localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
+      // Redirect to dashboard after successful login
+      navigate("/");
+    } catch (error) {
+      alert(error.response?.data?.message || "Login failed");
     }
-
-    // Navigate to dashboard or home
-    navigate("/UserDetail-form");
-
-    // ✅ Refresh the page so Navbar updates
-    window.location.reload();
-
-  } catch (error) {
-    alert(error.response?.data?.message || "Login failed");
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

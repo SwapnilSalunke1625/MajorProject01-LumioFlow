@@ -3,13 +3,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-
 export default function AdminSignUp() {
-
   // rounting purpose
   const navigate = useNavigate();
-
 
   // usestate hook for taking data
   const [formData, setFormData] = useState({
@@ -45,9 +41,8 @@ export default function AdminSignUp() {
     }
   };
 
-
   // handling submit form
-const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (formData.password !== formData.confirmPassword) {
@@ -55,6 +50,7 @@ const handleSubmit = async (e) => {
     return;
   }
 
+  // Convert preferredNotification object to array
   const selectedNotifications = [];
   if (formData.preferredNotification.whatsappnotify) {
     selectedNotifications.push("whatsapp");
@@ -66,38 +62,35 @@ const handleSubmit = async (e) => {
   try {
     const dataToSend = {
       ...formData,
-      preferredNotification: selectedNotifications,
+      preferredNotification: selectedNotifications, // ✅ this is now an array of strings
       signupDate: new Date().toISOString(),
     };
 
-    const res = await axios.post(
-      "/api/v1/users/signup",
-      dataToSend,
-      {
-        withCredentials: true, // ✅ Set cookie properly
-      }
-    );
+    const res = await axios.post("/api/v1/users/signup", dataToSend);
+    console.log("Signup Success:", res.data);
 
-    const { token, user } = res.data.data || {};
+    navigate("/signin");
 
-    // Store token and user to localStorage (optional)
-    if (token && user) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-    }
-
-    // ✅ Redirect to form
-    navigate("/UserDetail-form");
-
-    // ✅ Force refresh to re-check authentication in Navbar
-    window.location.reload();
-
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      country: "",
+      state: "",
+      city: "",
+      userType: "",
+      password: "",
+      confirmPassword: "",
+      preferredNotification: {
+        whatsappnotify: false,
+        emailnotify: false,
+      },
+    });
   } catch (err) {
     console.error("Signup Error:", err.response?.data || err.message);
     alert("Signup failed. Please try again.");
   }
 };
-
 
 
   return (
