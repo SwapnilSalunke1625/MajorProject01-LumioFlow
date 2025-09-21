@@ -59,22 +59,24 @@ export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Navbar/>
-        <LoadingSpinner/>
+        <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+          <Navbar/>
+          <LoadingSpinner/>
 
-        <Routes>      
-          <Route path="/" element={<Home />} />        
-          <Route path="/signin" element={<AdminSignIn />} />
-          <Route path="/signup" element={<AdminSignUp />} />
-          <Route path="/dashboard" element={<AdminDashboard />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/energy-management" element={<Dashboard />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-        <Footer/>
-        <ChatWidget />
+          <Routes>      
+            <Route path="/" element={<Home />} />        
+            <Route path="/signin" element={<AdminSignIn />} />
+            <Route path="/signup" element={<AdminSignUp />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/energy-management" element={<Dashboard />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+          <Footer/>
+          <ChatWidget />
+        </div>
       </BrowserRouter>
     </ErrorBoundary>
   )

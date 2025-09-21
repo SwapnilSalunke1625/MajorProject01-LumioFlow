@@ -32,7 +32,7 @@ connectDB()
     const PORT = process.env.PORT || 8000;
     app.listen(PORT, '0.0.0.0', ()=>{
         console.log(`🚀 Server is running at http://localhost:${PORT}`);
-        console.log(`🌐 Server is accessible at http://192.168.235.50:${PORT}`);
+        console.log(`🌐 Server is accessible at http://10.198.15.50:${PORT}`);
         console.log(`📡 API endpoints:`);
         console.log(`   - http://localhost:${PORT}/test`);
         console.log(`   - http://localhost:${PORT}/api/power/test`);

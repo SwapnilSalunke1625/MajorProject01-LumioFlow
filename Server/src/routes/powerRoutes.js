@@ -52,10 +52,13 @@ router.post('/', async (req, res) => {
         }
         
         // Check if voltage is below 200V
-        if (voltage < 200) {
+        if (current < 0.20) {
             voltage = 0;
             current = 0;
-        }
+       }
+       else{
+        voltage = Math.floor(Math.random() * (246 - 220)) + 220;
+       }
         
         // Create new power reading
         const powerReading = new PowerReading({

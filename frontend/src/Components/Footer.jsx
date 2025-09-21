@@ -33,9 +33,9 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white relative overflow-hidden">
+    <footer className="relative overflow-hidden bg-green-500 dark:bg-gray-900 text-gray-900 dark:text-white">
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900" />
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900" />
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -53,11 +53,11 @@ const Footer = () => {
               <div className="h-10 w-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
                 L
               </div>
-              <span className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">
+              <span className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-blue-500 to-purple-500 dark:from-green-400 dark:via-blue-500 dark:to-purple-500">
                 LumioFlow
               </span>
             </div>
-            <p className="text-gray-400 leading-relaxed">
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
               Empowering sustainable energy management through innovative technology solutions.
             </p>
             <div className="flex space-x-4">
@@ -67,7 +67,7 @@ const Footer = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xl hover:scale-110 transition-transform duration-300 hover:text-green-400"
+                  className="text-2xl text-gray-600 dark:text-gray-300 hover:scale-110 transition-transform duration-300 hover:text-green-600 dark:hover:text-green-400"
                   title={social.name}
                   aria-label={social.name}
                 >
@@ -79,15 +79,15 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-green-400">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-6 text-green-700 dark:text-green-400">Quick Links</h3>
             <ul className="space-y-4">
               {footerLinks.company.map((link, index) => (
                 <li key={index} className="group">
                   <a
                     href={link.path}
-                    className="text-gray-400 hover:text-white transition-all duration-300 flex items-center space-x-2 group-hover:translate-x-2"
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 flex items-center space-x-2 group-hover:translate-x-2"
                   >
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full opacity-60 group-hover:opacity-100" />
+                    <span className="w-1.5 h-1.5 bg-green-600 dark:bg-green-500 rounded-full opacity-60 group-hover:opacity-100" />
                     <span>{link.name}</span>
                   </a>
                 </li>
@@ -97,15 +97,15 @@ const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-blue-400">Support</h3>
+            <h3 className="text-lg font-semibold mb-6 text-blue-700 dark:text-blue-400">Support</h3>
             <ul className="space-y-4">
               {footerLinks.support.map((link, index) => (
                 <li key={index} className="group">
                   <a
                     href={link.path}
-                    className="text-gray-400 hover:text-white transition-all duration-300 flex items-center space-x-2 group-hover:translate-x-2"
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 flex items-center space-x-2 group-hover:translate-x-2"
                   >
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full opacity-60 group-hover:opacity-100" />
+                    <span className="w-1.5 h-1.5 bg-blue-600 dark:bg-blue-500 rounded-full opacity-60 group-hover:opacity-100" />
                     <span>{link.name}</span>
                   </a>
                 </li>
@@ -115,14 +115,14 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-purple-400">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-6 text-purple-700 dark:text-purple-400">Contact Us</h3>
             <ul className="space-y-4">
               {contactInfo.map((contact, index) => (
                 <li
                   key={index}
-                  className="flex items-center space-x-3 text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-2 cursor-pointer"
+                  className="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:translate-x-2 cursor-pointer"
                 >
-                  <span className="text-green-400 text-lg">{contact.icon}</span>
+                  <span className="text-green-600 dark:text-green-400 text-lg">{contact.icon}</span>
                   <span>{contact.text}</span>
                 </li>
               ))}
@@ -130,14 +130,14 @@ const Footer = () => {
 
             {/* Newsletter Signup */}
             <div className="mt-8">
-              <h4 className="text-sm font-semibold mb-3 text-gray-300">Stay Updated</h4>
+              <h4 className="text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">Stay Updated</h4>
               <div className="flex">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-l-lg text-sm focus:outline-none focus:border-green-500 transition-colors"
+                  className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-l-lg text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-green-500 transition-colors"
                 />
-                <button className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-r-lg transition-colors text-sm font-medium">
+                <button className="px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white rounded-r-lg transition-colors text-sm font-medium">
                   Subscribe
                 </button>
               </div>
@@ -146,19 +146,19 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 py-8">
+        <div className="border-t border-gray-200 dark:border-gray-800 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               © {currentYear} LumioFlow. All rights reserved. Made with 💚 for a sustainable future.
             </p>
             <div className="flex space-x-6">
-              <a href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors duration-300 hover:underline">
+              <a href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors duration-300 hover:underline">
                 Privacy Policy
               </a>
-              <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors duration-300 hover:underline">
+              <a href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors duration-300 hover:underline">
                 Terms of Service
               </a>
-              <a href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors duration-300 hover:underline">
+              <a href="/cookies" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors duration-300 hover:underline">
                 Cookie Policy
               </a>
             </div>
@@ -169,7 +169,7 @@ const Footer = () => {
         <div className="absolute bottom-4 right-110">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
             title="Back to top"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

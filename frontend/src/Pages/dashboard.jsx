@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Zap, TrendingUp, AlertTriangle, Lightbulb, Leaf, DollarSign, Power, Activity, Eye, EyeOff, BarChart2, PieChart as PieChartIcon, Plus, Trash2, Edit2, Home, Settings, Menu, X } from 'lucide-react';
+import { Zap, TrendingUp, AlertTriangle, Lightbulb, Leaf, DollarSign, Power, Activity, Eye, EyeOff, BarChart2, Plus, Trash2, Edit2, Home, Settings, Menu, X, Wind, Sun } from 'lucide-react';
 
 const DEFAULT_ROOMS = [
   'Living Room',
@@ -60,170 +60,214 @@ const DeviceRoomEnergyForm = ({ rooms, setRooms, selectedRoomIdx, setSelectedRoo
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow border border-slate-100">
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Device & Room Setup</h2>
-      {/* Room Management */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-slate-700 mb-3">Rooms</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {rooms.map((room, idx) => (
-            <div
-              key={room.name}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer ${
-                selectedRoomIdx === idx ? 'bg-emerald-100 border-emerald-400' : 'bg-slate-100 border-slate-200'
-              }`}
-              onClick={() => setSelectedRoomIdx(idx)}
-            >
-              <span>{room.name}</span>
-              {rooms.length > 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeRoom(idx);
-                  }}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="New room name"
-            value={newRoomName}
-            onChange={(e) => setNewRoomName(e.target.value)}
-            className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-          <button
-            onClick={addRoom}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Add Room
-          </button>
-        </div>
-      </div>
-      {/* Device Management */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-slate-700 mb-3">
-          Add Device to {rooms[selectedRoomIdx]?.name}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Device name"
-            value={deviceName}
-            onChange={(e) => setDeviceName(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-          <input
-            type="number"
-            placeholder="Power (W)"
-            value={devicePower}
-            onChange={(e) => setDevicePower(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-          <input
-            type="number"
-            placeholder="Quantity"
-            value={deviceQuantity}
-            onChange={(e) => setDeviceQuantity(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-          <input
-            type="number"
-            placeholder="Hours/day"
-            value={deviceHours}
-            onChange={(e) => setDeviceHours(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-        </div>
-        <button
-          onClick={addDevice}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Device
-        </button>
-      </div>
-      {/* Current Room Devices */}
-      <div>
-        <h3 className="text-lg font-semibold text-slate-700 mb-3">
-          Devices in {rooms[selectedRoomIdx]?.name}
-        </h3>
-        {rooms[selectedRoomIdx]?.devices.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-slate-100">
-                  <th className="py-2 px-3 text-left">Device</th>
-                  <th className="py-2 px-3 text-left">Power (W)</th>
-                  <th className="py-2 px-3 text-left">Quantity</th>
-                  <th className="py-2 px-3 text-left">Hours/day</th>
-                  <th className="py-2 px-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rooms[selectedRoomIdx].devices.map((device, idx) => (
-                  <tr key={idx} className="border-b border-slate-100">
-                    <td className="py-2 px-3">{device.name}</td>
-                    <td className="py-2 px-3">{device.power}</td>
-                    <td className="py-2 px-3">{device.quantity}</td>
-                    <td className="py-2 px-3">{device.hours}</td>
-                    <td className="py-2 px-3">
-                      <button
-                        onClick={() => removeDevice(idx)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+            <Leaf className="w-8 h-8 text-green-600" />
           </div>
-        ) : (
-          <p className="text-slate-500">No devices added to this room yet.</p>
-        )}
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">LumioFlow Dashboard</h1>
+          <p className="text-gray-600 text-lg">Set up your devices and rooms to start monitoring</p>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+            <Settings className="w-7 h-7 text-green-600" />
+            Device & Room Configuration
+          </h2>
+          
+          {/* Room Management */}
+          <div className="mb-10">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+              <Home className="w-5 h-5 text-green-600" />
+              Manage Rooms
+            </h3>
+            <div className="flex flex-wrap gap-3 mb-6">
+              {rooms.map((room, idx) => (
+                <div
+                  key={room.name}
+                  className={`flex items-center gap-3 px-5 py-3 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-md ${
+                    selectedRoomIdx === idx 
+                      ? 'bg-green-100 border-green-300 text-green-800' 
+                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-green-200'
+                  }`}
+                  onClick={() => setSelectedRoomIdx(idx)}
+                >
+                  <span className="font-medium">{room.name}</span>
+                  {rooms.length > 1 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeRoom(idx);
+                      }}
+                      className="text-red-400 hover:text-red-600 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Enter new room name"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+                className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 transition-colors"
+              />
+              <button
+                onClick={addRoom}
+                className="px-6 py-3 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition-colors flex items-center gap-2 font-medium"
+              >
+                <Plus className="w-5 h-5" />
+                Add Room
+              </button>
+            </div>
+          </div>
+
+          {/* Device Management */}
+          <div className="mb-10">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-green-600" />
+              Add Device to {rooms[selectedRoomIdx]?.name}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <input
+                type="text"
+                placeholder="Device name"
+                value={deviceName}
+                onChange={(e) => setDeviceName(e.target.value)}
+                className="px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 transition-colors"
+              />
+              <input
+                type="number"
+                placeholder="Power (W)"
+                value={devicePower}
+                onChange={(e) => setDevicePower(e.target.value)}
+                className="px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 transition-colors"
+              />
+              <input
+                type="number"
+                placeholder="Quantity"
+                value={deviceQuantity}
+                onChange={(e) => setDeviceQuantity(e.target.value)}
+                className="px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 transition-colors"
+              />
+              <input
+                type="number"
+                placeholder="Hours/day"
+                value={deviceHours}
+                onChange={(e) => setDeviceHours(e.target.value)}
+                className="px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 transition-colors"
+              />
+            </div>
+            <button
+              onClick={addDevice}
+              className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-2xl hover:from-green-700 hover:to-green-800 transition-all duration-300 flex items-center gap-2 font-medium shadow-lg"
+            >
+              <Plus className="w-5 h-5" />
+              Add Device
+            </button>
+          </div>
+
+          {/* Current Room Devices */}
+          <div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-6">
+              Devices in {rooms[selectedRoomIdx]?.name}
+            </h3>
+            {rooms[selectedRoomIdx]?.devices.length > 0 ? (
+              <div className="overflow-hidden rounded-2xl border border-gray-200">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-green-50">
+                        <th className="py-4 px-6 text-left font-semibold text-gray-800">Device</th>
+                        <th className="py-4 px-6 text-left font-semibold text-gray-800">Power (W)</th>
+                        <th className="py-4 px-6 text-left font-semibold text-gray-800">Quantity</th>
+                        <th className="py-4 px-6 text-left font-semibold text-gray-800">Hours/day</th>
+                        <th className="py-4 px-6 text-left font-semibold text-gray-800">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rooms[selectedRoomIdx].devices.map((device, idx) => (
+                        <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                          <td className="py-4 px-6 font-medium text-gray-800">{device.name}</td>
+                          <td className="py-4 px-6 text-gray-600">{device.power}</td>
+                          <td className="py-4 px-6 text-gray-600">{device.quantity}</td>
+                          <td className="py-4 px-6 text-gray-600">{device.hours}</td>
+                          <td className="py-4 px-6">
+                            <button
+                              onClick={() => removeDevice(idx)}
+                              className="text-red-400 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-all"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500">
+                <Power className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p className="text-lg">No devices added to this room yet.</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 // Sidebar Component
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
-
+const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
-    <div className={`bg-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-16'}`}>
-      <div className="p-4">
+    <div className={`fixed top-0 left-0 h-screen bg-white shadow-2xl transition-all duration-300 border-r border-green-100  ${
+      isOpen ? 'w-72' : 'w-20'
+    }`}>
+      <div className="p-6">
         <div className="flex items-center justify-between">
-          {isOpen && <h2 className="text-xl font-bold text-slate-800">Energy Monitor</h2>}
+          {isOpen && (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
+                <Leaf className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <br /><br /><br />
+                <h2 className="text-xl font-bold text-gray-800">LumioFlow</h2>
+                <p className="text-sm text-gray-500">Smart Monitor</p>
+              </div>
+            </div>
+          )}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg hover:bg-slate-100"
+            className="p-3 rounded-2xl hover:bg-green-50 transition-colors"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-5 h-5 text-gray-600" />
           </button>
         </div>
       </div>
-      <nav className="mt-8">
-        <div className="px-4 space-y-2">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-emerald-100 text-emerald-700">
-            <Home className="w-5 h-5" />
-            {isOpen && <span>Dashboard</span>}
+      <nav className="mt-8 px-4">
+        <div className="space-y-3">
+          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg">
+            <Home className="w-6 h-6 flex-shrink-0" />
+            {isOpen && <span className="font-medium">Dashboard</span>}
           </div>
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
-            <BarChart2 className="w-5 h-5" />
-            {isOpen && <span>Analytics</span>}
+          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl text-gray-600 hover:bg-green-50 hover:text-green-700 transition-all cursor-pointer">
+            <BarChart2 className="w-6 h-6 flex-shrink-0" />
+            {isOpen && <span className="font-medium">Analytics</span>}
           </div>
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
-            <Settings className="w-5 h-5" />
-            {isOpen && <span>Settings</span>}
+          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl text-gray-600 hover:bg-green-50 hover:text-green-700 transition-all cursor-pointer">
+            <Leaf className="w-6 h-6 flex-shrink-0" />
+            {isOpen && <span className="font-medium">Eco Tips</span>}
+          </div>
+          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl text-gray-600 hover:bg-green-50 hover:text-green-700 transition-all cursor-pointer">
+            <Settings className="w-6 h-6 flex-shrink-0" />
+            {isOpen && <span className="font-medium">Settings</span>}
           </div>
         </div>
       </nav>
@@ -232,18 +276,27 @@ const Sidebar = () => {
 };
 
 // Topbar Component
-const Topbar = () => {
+const Topbar = ({ sidebarWidth }) => {
   return (
-    <div className="bg-white shadow-sm border-b border-slate-200 px-8 py-4">
+    <div 
+      className="fixed top-0 right-0 bg-white/95 backdrop-blur-sm shadow-sm border-b border-green-100 px-8 py-6 z-20"
+      style={{ left: `${sidebarWidth}px` }}
+    >
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-slate-800">Energy Dashboard</h1>
-          <p className="text-sm text-slate-600">Monitor your power consumption in real-time</p>
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+              <Activity className="w-4 h-4 text-white" />
+            </div>
+            <br /><br /><br />
+            Energy Dashboard
+          </h1>
+          <p className="text-gray-600 mt-1">Monitor your power consumption in real-time</p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-slate-600">Live Monitoring</span>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-2xl">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-green-700">Live Monitoring</span>
           </div>
         </div>
       </div>
@@ -267,6 +320,10 @@ const Dashboard = () => {
   );
   const [selectedRoomIdx, setSelectedRoomIdx] = useState(0);
   const [setupComplete, setSetupComplete] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Calculate sidebar width for proper spacing
+  const sidebarWidth = sidebarOpen ? 288 : 80; // 72 * 4 = 288px, 20 * 4 = 80px
 
   // Calculate stat card values
   const totalRooms = rooms.length;
@@ -284,28 +341,28 @@ const Dashboard = () => {
   // Energy saving tips
   const energyTips = [
     {
-      icon: <Leaf className="w-8 h-8 text-emerald-400" />,
+      icon: <Wind className="w-10 h-10 text-green-500" />,
       title: "Optimize AC Usage",
       description: "Set your AC to 24°C for optimal comfort and energy efficiency",
-      color: "emerald"
+      color: "green"
     },
     {
-      icon: <Lightbulb className="w-8 h-8 text-amber-400" />,
+      icon: <Lightbulb className="w-10 h-10 text-green-500" />,
       title: "Use LED Lighting",
       description: "Switch to LED bulbs to reduce lighting energy consumption by up to 80%",
-      color: "amber"
+      color: "green"
     },
     {
-      icon: <Zap className="w-8 h-8 text-blue-400" />,
-      title: "Unplug Devices",
-      description: "Unplug devices when not in use to prevent phantom power consumption",
-      color: "blue"
+      icon: <Sun className="w-10 h-10 text-green-500" />,
+      title: "Solar Power",
+      description: "Consider solar panels to reduce dependency on grid electricity",
+      color: "green"
     },
     {
-      icon: <TrendingUp className="w-8 h-8 text-purple-400" />,
+      icon: <Leaf className="w-10 h-10 text-green-500" />,
       title: "Smart Scheduling",
       description: "Schedule high-power devices to run during off-peak hours",
-      color: "purple"
+      color: "green"
     }
   ];
 
@@ -318,7 +375,7 @@ const Dashboard = () => {
   const fetchReadings = async () => {
     try {
       // Try to fetch from API first
-      const response = await fetch('http://10.121.127.50:8000/api/power');
+      const response = await fetch('http://10.198.15.50:8000/api/power');
       
       if (!response.ok) {
         throw new Error(`Failed to fetch readings: ${response.status}`);
@@ -541,121 +598,163 @@ const Dashboard = () => {
 
   if (!setupComplete) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="w-full max-w-4xl">
-          <DeviceRoomEnergyForm
-            rooms={rooms}
-            setRooms={setRooms}
-            selectedRoomIdx={selectedRoomIdx}
-            setSelectedRoomIdx={setSelectedRoomIdx}
-          />
-          <div className="flex justify-end mt-6">
-            <button
-              className="bg-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition"
-              onClick={() => setSetupComplete(true)}
-            >
-              Continue to Dashboard
-            </button>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100">
+        <DeviceRoomEnergyForm
+          rooms={rooms}
+          setRooms={setRooms}
+          selectedRoomIdx={selectedRoomIdx}
+          setSelectedRoomIdx={setSelectedRoomIdx}
+        />
+        <div className="fixed bottom-8 right-8">
+          <button
+            className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-4 rounded-2xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-2xl flex items-center gap-3"
+            onClick={() => setSetupComplete(true)}
+          >
+            <Activity className="w-5 h-5" />
+            Continue to Dashboard
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Topbar />
-        <main className="flex-1 p-8 overflow-y-auto">
-          {/* Connection Status */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-bold text-slate-800">Energy Dashboard</h1>
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-              <span className="text-sm text-slate-600">
-                {isConnected ? 'Connected to API' : 'Using Mock Data'}
-              </span>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100">
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <Topbar sidebarWidth={sidebarWidth} />
+      
+      {/* Main Content */}
+      <main 
+        className="pt-32 pb-8 px-8 min-h-screen transition-all duration-300"
+        style={{ marginLeft: `${sidebarWidth}px` }}
+      >
+        {/* Connection Status */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">Energy Dashboard</h1>
+            <p className="text-gray-600">Real-time monitoring and analytics</p>
           </div>
+          <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-lg border border-green-100">
+            <div className={`w-4 h-4 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <span className="text-sm font-medium text-gray-700">
+              {isConnected ? 'Connected to API' : 'Using Mock Data'}
+            </span>
+          </div>
+        </div>
 
-          {/* Current Reading Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-emerald-100 text-sm">Voltage</p>
-                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].voltage.toFixed(2) : '0.00'} V</p>
-                </div>
-                <Zap className="w-8 h-8 text-emerald-200" />
+        {/* Current Reading Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium mb-2">VOLTAGE</p>
+                <p className="text-4xl font-bold text-gray-800 mb-1">
+                  {readings.length > 0 ? readings[0].voltage.toFixed(2) : '0.00'}
+                </p>
+                <p className="text-gray-600">Volts</p>
               </div>
-            </div>
-            <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-100 text-sm">Current</p>
-                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].current.toFixed(2) : '0.00'} A</p>
-                </div>
-                <Activity className="w-8 h-8 text-blue-200" />
-              </div>
-            </div>
-            <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-purple-100 text-sm">Power</p>
-                  <p className="text-3xl font-bold">{readings.length > 0 ? readings[0].power.toFixed(2) : '0.00'} W</p>
-                </div>
-                <Power className="w-8 h-8 text-purple-200" />
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Activity className="w-8 h-8 text-white" />
               </div>
             </div>
           </div>
+          <div className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium mb-2">POWER</p>
+                <p className="text-4xl font-bold text-gray-800 mb-1">
+                  {readings.length > 0 ? readings[0].power.toFixed(2) : '0.00'}
+                </p>
+                <p className="text-gray-600">Watts</p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-800 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Power className="w-8 h-8 text-white" />
+              </div>
+            </div>
+          </div>
+          <div className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium mb-2">CURRENT</p>
+                <p className="text-4xl font-bold text-gray-800 mb-1">
+                  {readings.length > 0 ? readings[0].current.toFixed(2) : '0.00'}
+                </p>
+                <p className="text-gray-600">Amperes</p>
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* Rooms Overview */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4 text-slate-800">Rooms Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {rooms.map((room, idx) => (
-                <div
-                  key={room.name}
-                  className={`cursor-pointer bg-white rounded-2xl p-6 shadow border transition-all ${
-                    selectedRoomIdx === idx ? 'ring-2 ring-emerald-400 border-emerald-200' : 'border-slate-100 hover:border-slate-200'
-                  }`}
-                  onClick={() => setSelectedRoomIdx(idx)}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <Home className="w-6 h-6 text-emerald-500" />
-                    <span className="text-lg font-semibold text-slate-800">{room.name}</span>
+        {/* Rooms Overview */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold mb-8 text-gray-800 flex items-center gap-3">
+            <Home className="w-8 h-8 text-green-600" />
+            Rooms Overview
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rooms.map((room, idx) => (
+              <div
+                key={room.name}
+                className={`cursor-pointer bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] ${
+                  selectedRoomIdx === idx ? 'ring-2 ring-green-400 border-green-200' : 'border-green-100'
+                }`}
+                onClick={() => setSelectedRoomIdx(idx)}
+              >
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center">
+                    <Home className="w-6 h-6 text-white" />
                   </div>
-                  <div className="space-y-1 text-sm text-slate-600">
-                    <div>Devices: {room.devices.length}</div>
-                    <div>Total Power: {room.devices.reduce((sum, d) => sum + (Number(d.power) || 0) * (Number(d.quantity) || 1), 0)} W</div>
-                    <div>Daily Energy: {room.devices.reduce((sum, d) => sum + ((Number(d.power) || 0) * (Number(d.hours) || 0) * (Number(d.quantity) || 1)) / 1000, 0).toFixed(2)} kWh</div>
+                  <span className="text-xl font-bold text-gray-800">{room.name}</span>
+                </div>
+                <div className="space-y-3 text-gray-600">
+                  <div className="flex justify-between">
+                    <span>Devices:</span>
+                    <span className="font-semibold text-gray-800">{room.devices.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Total Power:</span>
+                    <span className="font-semibold text-gray-800">
+                      {room.devices.reduce((sum, d) => sum + (Number(d.power) || 0) * (Number(d.quantity) || 1), 0)} W
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Daily Energy:</span>
+                    <span className="font-semibold text-green-600">
+                      {room.devices.reduce((sum, d) => sum + ((Number(d.power) || 0) * (Number(d.hours) || 0) * (Number(d.quantity) || 1)) / 1000, 0).toFixed(2)} kWh
+                    </span>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Room Details */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center">
+                <Power className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">{selectedRoom.name} - Device Status</h2>
             </div>
           </div>
-
-          {/* Selected Room Details */}
-          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Power className="w-6 h-6 text-blue-500" />
-                <h2 className="text-xl font-bold text-slate-800">{selectedRoom.name} - Device Details</h2>
-              </div>
-            </div>
-            {selectedRoom.devices.length > 0 ? (
+          {selectedRoom.devices.length > 0 ? (
+            <div className="overflow-hidden rounded-2xl border border-green-100">
               <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
+                <table className="min-w-full">
                   <thead>
-                    <tr className="text-gray-400">
-                      <th className="py-2 px-4">Device</th>
-                      <th className="py-2 px-4">Power (W)</th>
-                      <th className="py-2 px-4">Quantity</th>
-                      <th className="py-2 px-4">Hours/Day</th>
-                      <th className="py-2 px-4">Daily (kWh)</th>
-                      <th className="py-2 px-4">Monthly (kWh)</th>
-                      <th className="py-2 px-4">Status</th>
+                    <tr className="bg-green-50">
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Device</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Power (W)</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Quantity</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Hours/Day</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Daily (kWh)</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Monthly (kWh)</th>
+                      <th className="py-4 px-6 text-left font-semibold text-gray-800">Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -666,21 +765,23 @@ const Dashboard = () => {
                       const daily = ((power * hours * qty) / 1000).toFixed(2);
                       const monthly = (daily * 30).toFixed(2);
                       return (
-                        <tr key={idx} className={deviceStatus[idx] ? 'text-green-600' : 'text-red-400'}>
-                          <td className="py-2 px-4">{device.name}</td>
-                          <td className="py-2 px-4">{power}</td>
-                          <td className="py-2 px-4">{qty}</td>
-                          <td className="py-2 px-4">{hours}</td>
-                          <td className="py-2 px-4">{daily}</td>
-                          <td className="py-2 px-4">{monthly}</td>
-                          <td className="py-2 px-4 font-bold">
+                        <tr key={idx} className="border-b border-green-50 hover:bg-green-25 transition-colors">
+                          <td className="py-4 px-6 font-medium text-gray-800">{device.name}</td>
+                          <td className="py-4 px-6 text-gray-600">{power}</td>
+                          <td className="py-4 px-6 text-gray-600">{qty}</td>
+                          <td className="py-4 px-6 text-gray-600">{hours}</td>
+                          <td className="py-4 px-6 text-gray-600">{daily}</td>
+                          <td className="py-4 px-6 text-gray-600">{monthly}</td>
+                          <td className="py-4 px-6 font-bold">
                             {deviceStatus[idx] ? (
                               <span className="flex items-center text-green-600">
-                                <span className="w-3 h-3 rounded-full bg-green-500 mr-2"></span> ON
+                                <div className="w-3 h-3 rounded-full bg-green-500 mr-3 animate-pulse"></div> 
+                                ON
                               </span>
                             ) : (
-                              <span className="flex items-center text-red-500">
-                                <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span> OFF
+                              <span className="flex items-center text-gray-400">
+                                <div className="w-3 h-3 rounded-full bg-gray-400 mr-3"></div> 
+                                OFF
                               </span>
                             )}
                           </td>
@@ -690,90 +791,145 @@ const Dashboard = () => {
                   </tbody>
                 </table>
               </div>
-            ) : (
-              <p className="text-slate-500">No devices added to this room yet.</p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="text-center py-16 text-gray-500">
+              <Power className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <p className="text-xl mb-2">No devices added to this room yet</p>
+              <p className="text-gray-400">Add some devices to start monitoring</p>
+            </div>
+          )}
+        </div>
 
-          {/* Overall Summary */}
-          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
-            <h2 className="text-xl font-bold mb-4 text-slate-800">Overall Summary</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-emerald-100 rounded-xl p-4 text-emerald-800">
-                <div className="font-semibold">Total Rooms</div>
-                <div className="text-2xl font-bold">{rooms.length}</div>
+        {/* Overall Summary */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 mb-12">
+          <h2 className="text-2xl font-bold mb-8 text-gray-800 flex items-center gap-3">
+            <BarChart2 className="w-7 h-7 text-green-600" />
+            Overall Summary
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-6 text-green-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-green-600 font-semibold">Total Rooms</div>
+                <Home className="w-6 h-6 text-green-600" />
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-blue-800">
-                <div className="font-semibold">Total Devices</div>
-                <div className="text-2xl font-bold">{totalDevices}</div>
+              <div className="text-3xl font-bold">{rooms.length}</div>
+            </div>
+            <div className="bg-gradient-to-br from-green-200 to-green-300 rounded-2xl p-6 text-green-900">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-green-700 font-semibold">Total Devices</div>
+                <Power className="w-6 h-6 text-green-700" />
               </div>
-              <div className="bg-purple-100 rounded-xl p-4 text-purple-800">
-                <div className="font-semibold">Total Daily Energy</div>
-                <div className="text-2xl font-bold">{totalConsumption.toFixed(2)} kWh</div>
+              <div className="text-3xl font-bold">{totalDevices}</div>
+            </div>
+            <div className="bg-gradient-to-br from-green-300 to-green-400 rounded-2xl p-6 text-green-900">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-green-800 font-semibold">Total Daily Energy</div>
+                <Activity className="w-6 h-6 text-green-800" />
               </div>
+              <div className="text-3xl font-bold">{totalConsumption.toFixed(2)} kWh</div>
             </div>
           </div>
+        </div>
 
-          {/* Charts & Analytics */}
-          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
-            <h2 className="text-xl font-bold mb-4 text-slate-800">Analytics & Charts</h2>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={getChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="time" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="power" stroke="#10b981" name="Power (W)" />
-                  <Line type="monotone" dataKey="voltage" stroke="#3b82f6" name="Voltage (V)" />
-                  <Line type="monotone" dataKey="current" stroke="#8b5cf6" name="Current (A)" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+        {/* Charts & Analytics */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 mb-12">
+          <h2 className="text-2xl font-bold mb-8 text-gray-800 flex items-center gap-3">
+            <TrendingUp className="w-7 h-7 text-green-600" />
+            Power Analytics
+          </h2>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={getChartData()}>
+                <defs>
+                  <linearGradient id="powerGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="voltageGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                <XAxis dataKey="time" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    border: 'none',
+                    borderRadius: '16px',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                  }}
+                />
+                <Legend />
+                <Area 
+                  type="monotone" 
+                  dataKey="power" 
+                  stroke="#10b981" 
+                  strokeWidth={3}
+                  fill="url(#powerGradient)" 
+                  name="Power (W)" 
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="voltage" 
+                  stroke="#059669" 
+                  strokeWidth={2}
+                  fill="url(#voltageGradient)" 
+                  name="Voltage (V)" 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
+        </div>
 
-          {/* Energy Saving Tips */}
-          <div className="bg-white rounded-2xl p-6 shadow border border-slate-100 mb-8">
-            <h2 className="text-xl font-bold mb-4 text-slate-800">Energy Saving Tips</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {energyTips.map((tip, idx) => (
-                <div key={idx} className="bg-emerald-50 rounded-xl p-4 text-emerald-800">
-                  <div className="mb-2">{tip.icon}</div>
-                  <div className="font-semibold mb-1">{tip.title}</div>
-                  <div className="text-sm">{tip.description}</div>
+        {/* Energy Saving Tips */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-green-100 mb-12">
+          <h2 className="text-2xl font-bold mb-8 text-gray-800 flex items-center gap-3">
+            <Leaf className="w-7 h-7 text-green-600" />
+            Eco-Friendly Tips
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {energyTips.map((tip, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-green-800 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                <div className="mb-4">{tip.icon}</div>
+                <div className="font-bold mb-3 text-lg">{tip.title}</div>
+                <div className="text-sm text-green-700">{tip.description}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Alerts */}
+        {powerAlerts.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-8 text-gray-800 flex items-center gap-3">
+              <AlertTriangle className="w-7 h-7 text-red-500" />
+              System Alerts
+            </h2>
+            <div className="grid gap-4">
+              {powerAlerts.map((alert, idx) => (
+                <div
+                  key={idx}
+                  className={`p-6 rounded-2xl border-2 transition-all duration-300 hover:shadow-lg ${
+                    alert.type === 'warning'
+                      ? 'bg-red-50 border-red-200 text-red-800'
+                      : alert.type === 'alert'
+                      ? 'bg-orange-50 border-orange-200 text-orange-800'
+                      : 'bg-blue-50 border-blue-200 text-blue-800'
+                  }`}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-shrink-0">{alert.icon}</div>
+                    <p className="font-medium text-lg">{alert.message}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Alerts */}
-          {powerAlerts.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xl font-bold mb-4 text-slate-800">Alerts</h2>
-              <div className="grid gap-4">
-                {powerAlerts.map((alert, idx) => (
-                  <div
-                    key={idx}
-                    className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${
-                      alert.type === 'warning'
-                        ? 'bg-red-100 border-red-300 text-red-700'
-                        : alert.type === 'alert'
-                        ? 'bg-amber-100 border-amber-300 text-amber-700'
-                        : 'bg-blue-100 border-blue-300 text-blue-700'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      {alert.icon}
-                      <p className="font-medium">{alert.message}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </main>
-      </div>
+        )}
+      </main>
     </div>
   );
 };

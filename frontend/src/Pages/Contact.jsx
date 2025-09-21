@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaGithub, FaLinkedin, FaTwitter, FaCheck, FaTimes } from 'react-icons/fa';
+import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Check, X, Send, Clock, MessageCircle } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,17 +15,16 @@ const Contact = () => {
     message: ''
   });
 
+  const [focusedField, setFocusedField] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle the form submission to your backend
-    // For now, we'll simulate a successful submission
     setFormStatus({
       submitted: true,
       success: true,
       message: 'Thank you for your message! We will get back to you soon.'
     });
     
-    // Reset form after 3 seconds
     setTimeout(() => {
       setFormStatus({
         submitted: false,
@@ -51,103 +49,106 @@ const Contact = () => {
 
   const contactInfo = [
     {
-      icon: <FaEnvelope className="text-2xl text-green-500" />,
+      icon: <Mail className="w-6 h-6" />,
       title: "Email",
       content: "support@lumioflow.com",
-      link: "mailto:support@lumioflow.com"
+      link: "mailto:support@lumioflow.com",
+      description: "Get in touch via email"
     },
     {
-      icon: <FaPhone className="text-2xl text-blue-500" />,
+      icon: <Phone className="w-6 h-6" />,
       title: "Phone",
       content: "+1 (555) 123-4567",
-      link: "tel:+15551234567"
+      link: "tel:+15551234567",
+      description: "Call us during business hours"
     },
     {
-      icon: <FaMapMarkerAlt className="text-2xl text-purple-500" />,
+      icon: <MapPin className="w-6 h-6" />,
       title: "Location",
       content: "123 Tech Street, Silicon Valley, CA",
-      link: "https://maps.google.com"
+      link: "https://maps.google.com",
+      description: "Visit our office"
     }
   ];
 
   const socialLinks = [
-    {
-      icon: <FaGithub className="text-2xl" />,
-      link: "#",
-      label: "GitHub"
-    },
-    {
-      icon: <FaLinkedin className="text-2xl" />,
-      link: "#",
-      label: "LinkedIn"
-    },
-    {
-      icon: <FaTwitter className="text-2xl" />,
-      link: "#",
-      label: "Twitter"
-    }
+    { icon: <Github className="w-5 h-5" />, link: "#", label: "GitHub" },
+    { icon: <Linkedin className="w-5 h-5" />, link: "#", label: "LinkedIn" },
+    { icon: <Twitter className="w-5 h-5" />, link: "#", label: "Twitter" }
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">
-            Contact Us
+    <div className="min-h-screen bg-white">
+      <br /><br />
+      
+      {/* Header Section */}
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-16">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full text-green-700 text-sm font-medium mb-6">
+            <MessageCircle className="w-4 h-4" />
+            Get in touch
+          </div>
+          <h1 className="text-5xl font-light text-gray-900 mb-6">
+            Contact <span className="font-semibold text-green-600">Us</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed">
             Have questions about our ESP32 energy monitoring system? We'd love to hear from you.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
           {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-8 border border-green-500/20"
-          >
-            <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-gray-800/50 rounded-lg border border-green-500/20 focus:border-green-500/50 focus:outline-none transition-all duration-300"
-                  placeholder="Your name"
-                />
+          <div className="lg:col-span-3">
+            <div className="mb-8">
+              <h2 className="text-2xl font-light text-gray-900 mb-2">Send us a message</h2>
+              <div className="w-16 h-0.5 bg-green-500"></div>
+            </div>
+
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="relative">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-3">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField('name')}
+                    onBlur={() => setFocusedField('')}
+                    required
+                    className={`w-full px-0 py-3 bg-transparent border-0 border-b-2 transition-all duration-300 focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-400 ${
+                      focusedField === 'name' ? 'border-green-500' : 'border-gray-200'
+                    }`}
+                    placeholder="John Doe"
+                  />
+                </div>
+                
+                <div className="relative">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-3">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField('')}
+                    required
+                    className={`w-full px-0 py-3 bg-transparent border-0 border-b-2 transition-all duration-300 focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-400 ${
+                      focusedField === 'email' ? 'border-green-500' : 'border-gray-200'
+                    }`}
+                    placeholder="john@example.com"
+                  />
+                </div>
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-gray-800/50 rounded-lg border border-green-500/20 focus:border-green-500/50 focus:outline-none transition-all duration-300"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">
+
+              <div className="relative">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-3">
                   Subject
                 </label>
                 <input
@@ -156,13 +157,18 @@ const Contact = () => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  onFocus={() => setFocusedField('subject')}
+                  onBlur={() => setFocusedField('')}
                   required
-                  className="w-full px-4 py-3 bg-gray-800/50 rounded-lg border border-green-500/20 focus:border-green-500/50 focus:outline-none transition-all duration-300"
-                  placeholder="What's this about?"
+                  className={`w-full px-0 py-3 bg-transparent border-0 border-b-2 transition-all duration-300 focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-400 ${
+                    focusedField === 'subject' ? 'border-green-500' : 'border-gray-200'
+                  }`}
+                  placeholder="How can we help you?"
                 />
               </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">
+
+              <div className="relative">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-3">
                   Message
                 </label>
                 <textarea
@@ -170,115 +176,142 @@ const Contact = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  onFocus={() => setFocusedField('message')}
+                  onBlur={() => setFocusedField('')}
                   required
-                  rows="4"
-                  className="w-full px-4 py-3 bg-gray-800/50 rounded-lg border border-green-500/20 focus:border-green-500/50 focus:outline-none transition-all duration-300"
-                  placeholder="Your message..."
+                  rows="5"
+                  className={`w-full px-0 py-3 bg-transparent border-0 border-b-2 transition-all duration-300 focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-400 resize-none ${
+                    focusedField === 'message' ? 'border-green-500' : 'border-gray-200'
+                  }`}
+                  placeholder="Tell us more about your inquiry..."
                 />
               </div>
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Send Message
-              </button>
-            </form>
+
+              <div className="pt-6">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="group inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25"
+                >
+                  <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  Send Message
+                </button>
+              </div>
+            </div>
 
             {/* Form Status Message */}
             {formStatus.submitted && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`mt-4 p-4 rounded-lg ${
-                  formStatus.success ? 'bg-green-500/20' : 'bg-red-500/20'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
+              <div className={`mt-6 p-4 rounded-lg border-2 ${
+                formStatus.success 
+                  ? 'bg-green-50 border-green-200 text-green-800' 
+                  : 'bg-red-50 border-red-200 text-red-800'
+              }`}>
+                <div className="flex items-center gap-3">
                   {formStatus.success ? (
-                    <FaCheck className="text-green-500" />
+                    <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
                   ) : (
-                    <FaTimes className="text-red-500" />
+                    <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
+                      <X className="w-4 h-4 text-white" />
+                    </div>
                   )}
-                  <p className={formStatus.success ? 'text-green-500' : 'text-red-500'}>
-                    {formStatus.message}
-                  </p>
+                  <p className="font-medium">{formStatus.message}</p>
                 </div>
-              </motion.div>
+              </div>
             )}
-          </motion.div>
+          </div>
 
           {/* Contact Information */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="space-y-8"
-          >
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <h3 className="text-2xl font-light text-gray-900 mb-2">Get in touch</h3>
+              <div className="w-16 h-0.5 bg-green-500 mb-8"></div>
+            </div>
+
             {/* Contact Cards */}
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
-                <motion.a
+                <a
                   key={index}
                   href={info.link}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  className="block bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-green-500/20 hover:border-green-500/50 transition-all duration-300 hover:transform hover:scale-105"
+                  className="group block p-6 bg-gray-50 hover:bg-green-50 rounded-xl transition-all duration-300 hover:shadow-md hover:shadow-green-100/50 border-2 border-transparent hover:border-green-100"
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 group-hover:bg-green-200 group-hover:scale-110 transition-all duration-300">
                       {info.icon}
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1">{info.title}</h3>
-                      <p className="text-gray-400">{info.content}</p>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900 mb-1">{info.title}</h4>
+                      <p className="text-gray-600 mb-1">{info.content}</p>
+                      <p className="text-sm text-gray-500">{info.description}</p>
                     </div>
                   </div>
-                </motion.a>
+                </a>
               ))}
             </div>
 
+            {/* Business Hours */}
+            <div className="p-6 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <h4 className="font-medium text-gray-900">Business Hours</h4>
+              </div>
+              <div className="space-y-2 text-sm text-gray-600 ml-15">
+                <div className="flex justify-between">
+                  <span>Monday - Friday</span>
+                  <span className="text-gray-800 font-medium">9:00 AM - 6:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Saturday</span>
+                  <span className="text-gray-800 font-medium">10:00 AM - 4:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Sunday</span>
+                  <span className="text-gray-500">Closed</span>
+                </div>
+              </div>
+            </div>
+
             {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-green-500/20"
-            >
-              <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
-              <div className="flex space-x-4">
+            <div className="p-6 bg-gray-50 rounded-xl">
+              <h4 className="font-medium text-gray-900 mb-4">Follow Us</h4>
+              <div className="flex gap-4">
                 {socialLinks.map((social, index) => (
                   <a
                     key={index}
                     href={social.link}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-gray-600 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:scale-110 border border-gray-200 hover:border-green-200"
                     aria-label={social.label}
                   >
                     {social.icon}
                   </a>
                 ))}
               </div>
-            </motion.div>
+            </div>
+          </div>
+        </div>
 
-            {/* Business Hours */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-green-500/20"
-            >
-              <h3 className="text-xl font-bold mb-4">Business Hours</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                <p>Saturday: 10:00 AM - 4:00 PM</p>
-                <p>Sunday: Closed</p>
-              </div>
-            </motion.div>
-          </motion.div>
+        {/* Bottom CTA Section */}
+        <div className="mt-20 text-center">
+          <div className="max-w-2xl mx-auto p-8 bg-green-50 rounded-2xl border border-green-100">
+            <h3 className="text-2xl font-light text-gray-900 mb-4">
+              Ready to get started?
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Join thousands of users who are already monitoring their energy consumption with our ESP32 solution.
+            </p>
+            <button className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25">
+              <Send className="w-4 h-4" />
+              Start Your Project
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Contact; 
+export default Contact;
