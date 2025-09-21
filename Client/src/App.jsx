@@ -1,23 +1,34 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
-import Home from "./Pages/Home"
-import AdminDashboard from "./Pages/dashboard"
-import Products from "./Pages/Products"
-import EnergyManagement from "./Pages/EnergyManagement"
-import Resources from "./Pages/Resources"
-import About from "./Pages/About"
-import Contact from "./Pages/Contact"
+import Home from "./Pages/Home";
+import AdminDashboard from "./Pages/dashboard";
+import Products from "./Pages/Products";
+import EnergyManagement from "./Pages/EnergyManagement";
+import Resources from "./Pages/Resources";
+import About from "./Pages/About";
+import Contact from "./Pages/Contact";
 import Layout from './Components/Layout';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
-import LoadingSpinner from './Components/LoadingSpinner'
-import AdminSignIn  from './Pages/AdminSignIn';
+import LoadingSpinner from './Components/LoadingSpinner';
+import AdminSignIn from './Pages/AdminSignIn';
 import AdminSignUp from './Pages/AdminSignUp';
 import Dashboard from './Pages/dashboard';
 import ChatWidget from './Components/ChatWidget';
 
-// Error Boundary Component
+// -------------------- ScrollToTop Component --------------------
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return null;
+}
+
+// -------------------- ErrorBoundary Component --------------------
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -55,16 +66,20 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// -------------------- Main App Component --------------------
 export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
         <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
-          <Navbar/>
-          <LoadingSpinner/>
+          <Navbar />
+          <LoadingSpinner />
 
-          <Routes>      
-            <Route path="/" element={<Home />} />        
+          {/* 👇 Smooth scroll to top on route change */}
+          <ScrollToTop />
+
+          <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/signin" element={<AdminSignIn />} />
             <Route path="/signup" element={<AdminSignUp />} />
             <Route path="/dashboard" element={<AdminDashboard />} />
@@ -74,12 +89,11 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
-          <Footer/>
+
+          <Footer />
           <ChatWidget />
         </div>
       </BrowserRouter>
     </ErrorBoundary>
-  )
+  );
 }
-
-

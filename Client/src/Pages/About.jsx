@@ -1,4 +1,5 @@
 import React from 'react';
+import Lakhabhau from './lakhabhau.jpg';
 import { 
   Cpu, 
   TrendingUp, 
@@ -70,10 +71,10 @@ const About = () => {
     {
       name: "Swapnil Salunke",
       role: "Project Lead & Backend Engineer",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
+      image: "https://media.licdn.com/dms/image/v2/D4D03AQFROxwps6mvyQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1700409931876?e=2147483647&v=beta&t=FnIA9gZGWrUnZoEycVdcSLwPcp5ow5ZWqZ3kd0SM-M8",
       social: {
         github: "#",
-        linkedin: "#",
+        linkedin: "https://in.linkedin.com/in/swapnil-salunke-228337263",
         twitter: "#",
         email: "swapnil@lumioflow.com"
       },
@@ -83,10 +84,10 @@ const About = () => {
     {
       name: "Vishal Dhangare",
       role: "Frontend Lead & UX Designer & Android Developer",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+      image: "https://media.licdn.com/dms/image/v2/D5603AQF1uuZTxskJmA/profile-displayphoto-shrink_200_200/B56ZSJIo11GsAY-/0/1737467539996?e=2147483647&v=beta&t=O5CBzfqnapbycda4D9PWm5sWRxuw6lLleXfCeAsAwYQ",
       social: {
         github: "#",
-        linkedin: "#",
+        linkedin: "https://media.licdn.com/dms/image/v2/D5603AQF1uuZTxskJmA/profile-displayphoto-shrink_200_200/B56ZSJIo11GsAY-/0/1737467539996?e=2147483647&v=beta&t=O5CBzfqnapbycda4D9PWm5sWRxuw6lLleXfCeAsAwYQ",
         twitter: "#",
         email: "vishal@lumioflow.com"
       },
@@ -96,10 +97,11 @@ const About = () => {
     {
       name: "Laxmikant Tawde",
       role: "Backend Engineer & DevOps",
-      image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=300&h=300&fit=crop&crop=face",
+      image: Lakhabhau,
+
       social: {
         github: "#",
-        linkedin: "#",
+        linkedin: "https://in.linkedin.com/in/laxmikant-tawde-60b334383",
         twitter: "#",
         email: "laxmikant@lumioflow.com"
       },
@@ -109,10 +111,10 @@ const About = () => {
     {
       name: "Rohit Borde",
       role: "Iot Engineer",
-      image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=300&h=300&fit=crop&crop=face",
+      image: "https://media.licdn.com/dms/image/v2/D4E03AQFUG1oToQeUCQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1688889671841?e=2147483647&v=beta&t=SHEEk6B6_DAHGoLHo8cahEq5ObtoBCR97KBLiEFL4NM",
       social: {
         github: "#",
-        linkedin: "#",
+        linkedin: "https://in.linkedin.com/in/rohit-borde-b50661282",
         twitter: "#",
         email: "rohit@lumioflow.com"
       },
